@@ -53,8 +53,16 @@ export class MyDurableObject extends DurableObject {
 	 * @param name - The name provided to a Durable Object instance from a Worker
 	 * @returns The greeting to be sent back to the Worker
 	 */
-	async sayHello(name: string): Promise<string> {
-		return `Hello, ${name}!`;
+	async currentTime(): Promise<string> {
+		const date = new Date();
+		return date.toLocaleString("en-US")
+	}
+
+	async incrementCounter(): Promise<number> {
+		let count = await this.ctx.storage.get<number>('counter') || 0
+		count = count + 1
+		await this.ctx.storage.put('counter', count)
+		return count
 	}
 }
 
@@ -80,8 +88,9 @@ export default {
 
 		// We call the `sayHello()` RPC method on the stub to invoke the method on the remote
 		// Durable Object instance
-		let greeting = await stub.sayHello("world");
+		let greeting = await stub.currentTime();
+		let count = await stub.incrementCounter();
 
-		return new Response(greeting);
+		return new Response(`This was generated at: ${greeting} \nIt has been called ${count} times`);
 	},
 } satisfies ExportedHandler<Env>;
