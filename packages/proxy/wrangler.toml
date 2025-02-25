@@ -1,0 +1,7 @@
+name = "proxy-logger"
+main = "src/worker.js"
+compatibility_date = "2024-01-01"
+
+[[kv_namespaces]]
+binding = "PROXY_LOGS"
+id = "caa2337795e84a3ca2e5e15e6a8fb78d"

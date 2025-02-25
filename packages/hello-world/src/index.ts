@@ -12,7 +12,16 @@
  */
 
 export default {
-	async fetch(request, env, ctx): Promise<Response> {
-		return new Response("Hello World! Two!");
+	async fetch() {
+		const res = await fetch("https://httpbin.org/anything");
+
+		return new Response(JSON.stringify({
+			res: await res.json(),
+		}), {
+			headers: {
+				'content-type': 'application/json',
+				'cache-control': "private",
+			}
+		})
 	},
 } satisfies ExportedHandler<Env>;
